@@ -1,0 +1,77 @@
+@rootUrl = http://localhost:5000/api
+
+### Create New Normal User
+POST {{rootUrl}}/users/register
+Content-Type: application/json
+
+{
+  "fullName": "Bhavesh User",
+  "email": "Bhavesh.user@example.com",
+  "password": "Password123",
+  "phone": "0412345678",
+  "role": "user",
+  "address": {
+    "street": "12 Test Street",
+    "city": "Wollongong",
+    "state": "NSW",
+    "postalCode": "2500",
+    "country": "Australia"
+  },
+  "avatar": ""
+}
+
+### Create New Vendor
+POST {{rootUrl}}/users/register
+Content-Type: application/json
+
+{
+  "name": "Vendor Owner",
+  "email": "vendor@example.com",
+  "password": "Vendor@123",
+  "phone": "0411222333",
+  "role": "vendor",
+  "shopName": "Test Vendor Store",
+  "shopDetails": "We sell test products online",
+  "address": {
+    "street": "50 Market Road",
+    "city": "Sydney",
+    "state": "NSW",
+    "postalCode": "2000",
+    "country": "Australia"
+  }
+}
+
+
+### Create New Delivery Partner
+POST {{rootUrl}}/users/register
+Content-Type: application/json
+
+{
+  "name": "Delivery Rider",
+  "email": "rider@example.com",
+  "password": "Rider@123",
+  "phone": "0411333444",
+  "role": "delivery",
+  "vehicleType": "bike",
+  "licenseNumber": "DL-NSW-123456",
+  "address": {
+    "street": "22 Rider Lane",
+    "city": "Sydney",
+    "state": "NSW",
+    "postalCode": "2001",
+    "country": "Australia"
+  }
+}
+
+
+### Create Admin User
+POST {{rootUrl}}/users/register
+Content-Type: application/json
+
+{
+  "name": "Main Admin",
+  "email": "admin@example.com",
+  "password": "Admin@123",
+  "phone": "0411999888",
+  "role": "admin"
+}
