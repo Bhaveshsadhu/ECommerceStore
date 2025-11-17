@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, "Password is required"],
             minlength: 6,
-            select: false, // Do not send password in API response
         },
 
         phone: {

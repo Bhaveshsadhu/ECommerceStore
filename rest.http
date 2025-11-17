@@ -1,5 +1,7 @@
 @rootUrl = http://localhost:5000/api
 
+
+
 ### Create New Normal User
 POST {{rootUrl}}/users/register
 Content-Type: application/json
@@ -7,8 +9,8 @@ Content-Type: application/json
 {
   "fullName": "Bhavesh User",
   "email": "Bhavesh.user@example.com",
-  "password": "Password123",
-  "phone": "0412345678",
+  "password": "BhaveshSadhu@123",
+  "phone": "0413221234",
   "role": "user",
   "address": {
     "street": "12 Test Street",
@@ -25,7 +27,7 @@ POST {{rootUrl}}/users/register
 Content-Type: application/json
 
 {
-  "name": "Vendor Owner",
+  "fullName": "Vendor Owner",
   "email": "vendor@example.com",
   "password": "Vendor@123",
   "phone": "0411222333",
@@ -47,7 +49,7 @@ POST {{rootUrl}}/users/register
 Content-Type: application/json
 
 {
-  "name": "Delivery Rider",
+  "fullName": "Delivery Rider",
   "email": "rider@example.com",
   "password": "Rider@123",
   "phone": "0411333444",
@@ -69,9 +71,50 @@ POST {{rootUrl}}/users/register
 Content-Type: application/json
 
 {
-  "name": "Main Admin",
+  "fullName": "Main Admin",
   "email": "admin@example.com",
   "password": "Admin@123",
   "phone": "0411999888",
   "role": "admin"
 }
+
+############################################
+### USER LOGIN (GET COOKIE TOKEN)
+############################################
+### USER LOGIN
+# @name login
+POST {{rootUrl}}/users/login
+Content-Type: application/json
+
+{
+  "email": "Bhavesh.user@example.com",
+  "password": "BhaveshSadhu@123"
+}
+
+### GET USER PROFILE
+GET {{rootUrl}}/users/profile
+Cookie: token={{login.response.cookies.token}}
+
+### UPDATE USER PROFILE
+PUT {{rootUrl}}/users/profile
+Content-Type: application/json
+Cookie: token={{login.response.cookies.token}}
+
+{
+  "name": "Updated Name",
+  "phone": "0400000000",
+  "address": {
+    "street": "10 Updated St",
+    "city": "Sydney",
+    "state": "NSW",
+    "postalCode": "2000",
+    "country": "Australia"
+  }
+}
+### DELETE USER ACCOUNT
+DELETE {{rootUrl}}/users/deleteuser
+Cookie: token={{login.response.cookies.token}}
+
+### LOGOUT USER
+POST {{rootUrl}}/users/logout
+Cookie: token={{login.response.cookies.token}}
