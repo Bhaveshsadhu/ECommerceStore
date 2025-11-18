@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "seed": "node src/seed/seed.js",
+    "seed:destroy": "node src/seed/seed.js -d"
   },
   "keywords": [],
   "author": "",

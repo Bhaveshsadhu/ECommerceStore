@@ -8,6 +8,10 @@ import dotenv from "dotenv";
 
 import logger from "./utils/logger.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
+import productRoutes from "./routes/productRoutes.js";
+import cartRoutes from "./routes/cartRoutes.js";
+
+
 
 // Routes
 import authRoutes from "./routes/authRoutes.js";
@@ -60,6 +64,10 @@ app.get("/api/health", (req, res) => {
 
 // ===== Routes =====
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
+
+
 
 // ===== Error handling =====
 app.use(notFound);

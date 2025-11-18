@@ -122,3 +122,108 @@ POST {{baseUrl}}/auth/logout
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
 
+
+
+
+############################################################
+# PRODUCTS
+############################################################
+
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+
+### Get all products (public)
+GET {{baseUrl}}/products?page=1&limit=10&keyword=&category=&vendor=
+Content-Type: {{contentType}}
+
+### Get single product by ID (public)
+GET {{baseUrl}}/products/{{productId}}
+Content-Type: {{contentType}}
+
+### Get my vendor products (vendor/admin)
+GET {{baseUrl}}/products/vendor/me
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+### Create product (vendor or admin)
+POST {{baseUrl}}/products
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Sample Product",
+  "description": "This is a test product from Bhavesh's store.",
+  "price": 19.99,
+  "stock": 50,
+  "category": "{{categoryId}}",
+  "images": [
+    {
+      "url": "https://example.com/image.jpg",
+      "isThumbnail": true
+    }
+  ]
+}
+
+### Update product (vendor or admin)
+PUT {{baseUrl}}/products/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "name": "Updated Product Name",
+  "price": 24.99,
+  "stock": 100
+}
+
+### Delete product (vendor or admin)
+DELETE {{baseUrl}}/products/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+### Approve product (admin only)
+PATCH {{baseUrl}}/products/{{productId}}/approve
+Content-Type: {{contentType}}
+Authorization: Bearer {{adminToken}}
+
+
+############################################################
+# CART
+############################################################
+
+
+ @productId = 691c8ec8334da63728c5edb1
+
+### Get my cart
+GET {{baseUrl}}/cart
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+### Add item to cart
+POST {{baseUrl}}/cart/add
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "qty": 2
+}
+
+### Update item quantity in cart
+PUT {{baseUrl}}/cart/update
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "productId": "{{productId}}",
+  "qty": 5
+}
+
+### Remove item from cart
+DELETE {{baseUrl}}/cart/remove/{{productId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+### Clear cart
+DELETE {{baseUrl}}/cart/clear
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
