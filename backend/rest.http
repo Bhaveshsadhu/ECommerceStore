@@ -227,3 +227,42 @@ Authorization: Bearer {{token}}
 DELETE {{baseUrl}}/cart/clear
 Content-Type: {{contentType}}
 Authorization: Bearer {{token}}
+
+
+############################################################
+# ORDERS - CUSTOMER FLOW
+############################################################
+
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+# @token = PASTE_USER_JWT_HERE
+# shipping details can be edited below
+
+### Create order from cart
+POST {{baseUrl}}/orders
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+{
+  "shippingAddress": {
+    "fullName": "Bhavesh User",
+    "addressLine1": "123 Test Street",
+    "addressLine2": "Unit 5",
+    "city": "Sydney",
+    "state": "NSW",
+    "postcode": "2000",
+    "country": "Australia",
+    "phone": "0400000000"
+  },
+  "paymentMethod": "COD"
+}
+
+### Get my orders
+GET {{baseUrl}}/orders/my
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+### Get single order by ID
+GET {{baseUrl}}/orders/{{orderId}}
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
