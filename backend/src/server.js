@@ -6,12 +6,21 @@ import logger from "./utils/logger.js";
 
 dotenv.config();
 
-await connectDB();
-
 const PORT = process.env.PORT || 5000;
 
-const server = http.createServer(app);
+const startServer = async () => {
+    try {
+        await connectDB();
 
-server.listen(PORT, () => {
-    logger.info(`Server running on port ${PORT}`);
-});
+        const server = http.createServer(app);
+
+        server.listen(PORT, () => {
+            logger.info(`Server running on port ${PORT}`);
+        });
+    } catch (error) {
+        logger.error(`Failed to start server: ${error.message}`);
+        process.exit(1);
+    }
+};
+
+startServer();

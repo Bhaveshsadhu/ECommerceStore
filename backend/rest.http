@@ -1,0 +1,124 @@
+############################################################
+# BASE URL
+############################################################
+
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTFjNzhlMDlmNTE0ODNhYjM4OGYyNzUiLCJpYXQiOjE3NjM0NzM5MTIsImV4cCI6MTc2NDA3ODcxMn0.WiUjKekocM6Z_Vu7x10JaBcWcAmZa0Rqdb2hRPQb9QY
+
+
+############################################################
+# HEALTH CHECK
+############################################################
+
+### Health Check
+GET {{baseUrl}}/health
+Content-Type: {{contentType}}
+
+############################################################
+# AUTH MODULE
+############################################################
+
+### REGISTER USER
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Bhavesh",
+  "email": "bhavesh{{$timestamp}}@example.com",
+  "password": "password123",
+  "role": "user"
+}
+
+### REGISTER VENDOR
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Vendor User",
+  "email": "vendor{{$timestamp}}@example.com",
+  "password": "vendorpass123",
+  "role": "vendor"
+}
+
+### REGISTER DELIVERY PARTNER
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Delivery Partner",
+  "email": "delivery{{$timestamp}}@example.com",
+  "password": "delivery123",
+  "role": "delivery-partner"
+}
+
+### REGISTER ADMIN
+POST {{baseUrl}}/auth/register
+Content-Type: {{contentType}}
+
+{
+  "name": "Admin",
+  "email": "admin{{$timestamp}}@example.com",
+  "password": "admin123",
+  "role": "admin"
+}
+
+############################################################
+# LOGIN
+############################################################
+
+### LOGIN USER
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "bhavesh1763473632@example.com",
+  "password": "password123"
+}
+
+### LOGIN VENDOR
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "vendor1763473672@example.com",
+  "password": "vendorpass123"
+}
+
+### LOGIN DELIVERY PARTNER
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "delivery1763473684@example.com",
+  "password": "delivery123"
+}
+
+### LOGIN ADMIN
+POST {{baseUrl}}/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin1763473689@example.com",
+  "password": "admin123"
+}
+
+############################################################
+# GET CURRENT USER (Protected Route)
+############################################################
+
+### GET LOGGED-IN USER PROFILE
+GET {{baseUrl}}/auth/me
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+
+############################################################
+# LOGOUT
+############################################################
+
+### LOGOUT USER
+POST {{baseUrl}}/auth/logout
+Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
+

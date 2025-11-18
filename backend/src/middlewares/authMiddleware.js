@@ -1,0 +1,37 @@
+import jwt from "jsonwebtoken";
+import asyncHandler from "express-async-handler";
+import User from "../models/userModel.js";
+
+export const protect = asyncHandler(async (req, res, next) => {
+    let token;
+
+    // Check httpOnly cookie first
+    if (req.cookies && req.cookies.jwt) {
+        token = req.cookies.jwt;
+    }
+
+    // Or Authorization: Bearer TOKEN
+    if (!token && req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+        token = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!token) {
+        res.status(401);
+        throw new Error("Not authorized, no token");
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+        req.user = await User.findById(decoded.userId).select("-password");
+        if (!req.user) {
+            res.status(401);
+            throw new Error("User not found");
+        }
+
+        next();
+    } catch (error) {
+        res.status(401);
+        throw new Error("Not authorized, token failed");
+    }
+});
