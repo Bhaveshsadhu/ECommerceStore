@@ -1,0 +1,247 @@
+:root {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --accent-color: #f97316;
+  --body-bg: #f4f6fb;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --surface-color: #ffffff;
+  --surface-muted: #f8fafc;
+  --border-color: rgba(15, 23, 42, 0.08);
+  --shadow-sm: 0 12px 30px rgba(15, 23, 42, 0.08);
+  --shadow-lg: 0 35px 80px rgba(15, 23, 42, 0.2);
+  --radius-md: 1rem;
+  --radius-lg: 1.75rem;
+  --navbar-blur: rgba(255, 255, 255, 0.85);
+}
+
+body[data-theme="dark"] {
+  --primary-color: #60a5fa;
+  --primary-hover: #3b82f6;
+  --accent-color: #fb923c;
+  --body-bg: #0f172a;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5f5;
+  --surface-color: #10192b;
+  --surface-muted: #17233b;
+  --border-color: rgba(148, 163, 184, 0.3);
+  --shadow-sm: 0 12px 30px rgba(15, 23, 42, 0.65);
+  --shadow-lg: 0 35px 80px rgba(15, 23, 42, 0.9);
+  --navbar-blur: rgba(15, 23, 42, 0.85);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--body-bg);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--primary-hover);
+}
+
+.app-shell {
+  min-height: 100vh;
+  background: linear-gradient(180deg, rgba(37, 99, 235, 0.04) 0%, transparent 32%);
+  display: flex;
+  flex-direction: column;
+}
+
+.app-navbar {
+  background-color: var(--navbar-blur);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+}
+
+.btn-outline-secondary {
+  border-color: rgba(15, 23, 42, 0.2);
+  color: var(--text-primary);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:focus {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+}
+
+.surface-card {
+  background-color: var(--surface-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.hero-section {
+  border-radius: var(--radius-lg);
+  padding: clamp(2rem, 4vw, 4rem);
+  background: radial-gradient(circle at top right, rgba(37, 99, 235, 0.25), transparent 45%),
+    radial-gradient(circle at left, rgba(249, 115, 22, 0.18), transparent 35%),
+    var(--surface-color);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-kpi {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-md);
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.product-card {
+  border: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  background-color: var(--surface-color);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.product-card .product-image {
+  width: 100%;
+  height: 200px;
+  border-radius: calc(var(--radius-md) - 0.5rem);
+  background: linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(249, 115, 22, 0.08));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+}
+
+.badge-soft {
+  background-color: rgba(37, 99, 235, 0.1);
+  color: var(--primary-color);
+  border-radius: 999px;
+  padding: 0.4rem 0.85rem;
+  font-weight: 500;
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.section-heading h2 {
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  margin: 0;
+}
+
+.chip {
+  border-radius: 999px;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--border-color);
+  background-color: var(--surface-muted);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.category-pill {
+  border-radius: 999px;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-primary);
+  padding: 0.65rem 1.25rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-pill:hover,
+.category-pill:focus {
+  border-color: var(--primary-color);
+  color: var(--primary-color);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.08);
+}
+
+.category-pill .category-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--surface-muted);
+  color: inherit;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.featured-scroll {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(240px, 1fr);
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x proximity;
+  scrollbar-width: none;
+}
+
+.featured-card-wrapper {
+  scroll-snap-align: center;
+}
+
+.featured-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.cart-item-card {
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.cart-item-card:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.table thead th {
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody td {
+  border-top: 1px solid var(--border-color);
+}
