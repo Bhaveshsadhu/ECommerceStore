@@ -4,6 +4,7 @@ import { fetchProducts } from "../features/products/productsSlice.js";
 import ProductList from "../features/products/components/ProductList.jsx";
 
 const Home = () => {
+  
     const dispatch = useDispatch();
     const { items, status, error, total } = useSelector(
         (state) => state.products
