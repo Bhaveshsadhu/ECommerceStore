@@ -1,10 +1,26 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../cart/cartSlice.js";
+import useAuth from "../../../hooks/useAuth.js";
 
 const ProductCard = ({ product }) => {
     const thumbnail =
         product.images && product.images.length > 0
             ? product.images[0].url
             : "https://via.placeholder.com/300x200?text=No+Image";
+
+    const dispatch = useDispatch();
+    const { user } = useAuth();
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleAddToCart = () => {
+        if (!user) {
+            navigate("/login", { state: { from: location } });
+            return;
+        }
+        dispatch(addToCart({ productId: product._id, qty: 1 }));
+    };
 
     return (
         <div className="col-sm-6 col-md-4 col-lg-3 mb-4">
@@ -35,7 +51,13 @@ const ProductCard = ({ product }) => {
                         >
                             View
                         </Link>
-                        {/* Add to cart will be wired in Cart step */}
+                        <button
+                            type="button"
+                            className="btn btn-sm btn-primary"
+                            onClick={handleAddToCart}
+                        >
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
             </div>

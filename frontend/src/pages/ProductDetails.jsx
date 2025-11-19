@@ -1,11 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation, useNavigate } from "react-router-dom";
 import { fetchProductById } from "../features/products/productsSlice.js";
+import { addToCart } from "../features/cart/cartSlice.js";
+import useAuth from "../hooks/useAuth.js";
 
 const ProductDetails = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const location = useLocation();
+    const { user } = useAuth();
+
     const {
         productDetails: product,
         detailsStatus,
@@ -17,6 +23,16 @@ const ProductDetails = () => {
             dispatch(fetchProductById(id));
         }
     }, [dispatch, id]);
+
+    const handleAddToCart = () => {
+        if (!user) {
+            navigate("/login", { state: { from: location } });
+            return;
+        }
+        if (product?._id) {
+            dispatch(addToCart({ productId: product._id, qty: 1 }));
+        }
+    };
 
     if (detailsStatus === "loading") {
         return (
@@ -73,9 +89,8 @@ const ProductDetails = () => {
                 </p>
 
                 <div className="d-flex gap-2 mt-3">
-                    {/* Add to cart will be implemented in Cart step */}
-                    <button className="btn btn-primary" disabled>
-                        Add to Cart (coming soon)
+                    <button className="btn btn-primary" onClick={handleAddToCart}>
+                        Add to Cart
                     </button>
                     <Link to="/" className="btn btn-outline-secondary">
                         Back to products
