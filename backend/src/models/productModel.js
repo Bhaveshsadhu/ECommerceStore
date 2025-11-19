@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import "./categoryModel.js";
 
+
 const imageSchema = new mongoose.Schema(
     {
         url: { type: String, required: true },
