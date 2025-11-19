@@ -61,7 +61,7 @@ app.use(
 // Rate limit (basic)
 const apiLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100,
+    max: 200,
     standardHeaders: true,
     legacyHeaders: false,
 });

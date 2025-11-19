@@ -16,6 +16,11 @@ import VendorOrders from "../pages/VendorOrders.jsx";
 import VendorOrderDetails from "../pages/VendorOrderDetails.jsx";
 import DeliveryDashboard from "../pages/DeliveryDashboard.jsx";
 import DeliveryOrders from "../pages/DeliveryOrders.jsx";
+import AdminDashboard from "../pages/AdminDashboard.jsx";
+import AdminUsers from "../pages/AdminUsers.jsx";
+import AdminVendors from "../pages/AdminVendors.jsx";
+import AdminDeliveryPartners from "../pages/AdminDeliveryPartners.jsx";
+import AdminOrders from "../pages/AdminOrders.jsx";
 
 
 
@@ -116,6 +121,48 @@ const AppRoutes = () => {
                             </ProtectedRoute>
                         }
                     />
+                    {/* Admin routes: only admin */}
+                    <Route
+                        path="/admin/dashboard"
+                        element={
+                            <ProtectedRoute allowedRoles={["admin"]}>
+                                <AdminDashboard />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/users"
+                        element={
+                            <ProtectedRoute allowedRoles={["admin"]}>
+                                <AdminUsers />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/vendors"
+                        element={
+                            <ProtectedRoute allowedRoles={["admin"]}>
+                                <AdminVendors />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/delivery-partners"
+                        element={
+                            <ProtectedRoute allowedRoles={["admin"]}>
+                                <AdminDeliveryPartners />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/admin/orders"
+                        element={
+                            <ProtectedRoute allowedRoles={["admin"]}>
+                                <AdminOrders />
+                            </ProtectedRoute>
+                        }
+                    />
+
 
                     <Route path="*" element={<NotFound />} />
                 </Routes>

@@ -62,6 +62,14 @@ const Navbar = () => {
                                     </Link>
                                 </li>
                             )}
+                        {user && user.role === "admin" && (
+                            <li className="nav-item">
+                                <Link className="nav-link" to="/admin/dashboard">
+                                    Admin Panel
+                                </Link>
+                            </li>
+                        )}
+
 
                         {user && (
                             <li className="nav-item">
