@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../features/cart/cartSlice.js";
 import { createOrder } from "../features/orders/ordersSlice.js";
 import { useNavigate, Link } from "react-router-dom";
+import { showSuccess, showError } from "../utils/toast.js";
 
 const Checkout = () => {
     const dispatch = useDispatch();
@@ -81,24 +82,30 @@ const Checkout = () => {
 
         const resultAction = await dispatch(createOrder(payload));
 
-        // backend clears cart; you can also refetch cart here
         if (createOrder.fulfilled.match(resultAction)) {
+            showSuccess("Order placed successfully!");
             dispatch(fetchCart());
+        } else {
+            showError(resultAction.payload || "Failed to place order");
         }
     };
 
     return (
-        <div className="row">
-            <div className="col-lg-7 mb-4">
-                <h3 className="mb-3">Checkout</h3>
+        <div>
+            <h2 className="mb-4">Checkout</h2>
+            <div className="row g-4">
+                <div className="col-lg-7">
+                    <div className="card shadow-sm border-0 rounded-3 mb-4">
+                        <div className="card-body p-4">
+                            <h5 className="card-title mb-4">Shipping Information</h5>
 
-                {createError && (
-                    <div className="alert alert-danger py-2">
-                        {createError}
-                    </div>
-                )}
+                            {createError && (
+                                <div className="alert alert-danger">
+                                    {createError}
+                                </div>
+                            )}
 
-                <form onSubmit={handleSubmit}>
+                            <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="form-label">Full Name</label>
                         <input
@@ -199,53 +206,68 @@ const Checkout = () => {
                         </select>
                     </div>
 
-                    <button
-                        type="submit"
-                        className="btn btn-primary w-100 mt-2"
-                        disabled={createStatus === "loading"}
-                    >
-                        {createStatus === "loading"
-                            ? "Placing order..."
-                            : "Place Order"}
-                    </button>
-                </form>
-            </div>
-
-            <div className="col-lg-5">
-                <div className="card shadow-sm border-0">
-                    <div className="card-body">
-                        <h5 className="card-title">Order Summary</h5>
-                        <ul className="list-unstyled mb-3" style={{ maxHeight: "200px", overflowY: "auto" }}>
-                            {cartItems.map((item) => (
-                                <li
-                                    key={item.product?._id}
-                                    className="d-flex justify-content-between small mb-1"
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary btn-lg w-100 mt-3"
+                                    disabled={createStatus === "loading"}
                                 >
-                                    <span>
-                                        {item.product?.name} x {item.qty}
-                                    </span>
-                                    <span>
-                                        $
-                                        {(
-                                            (item.product?.price || 0) * item.qty
-                                        ).toFixed(2)}
-                                    </span>
-                                </li>
-                            ))}
-                        </ul>
-                        <hr />
-                        <div className="d-flex justify-content-between">
-                            <span>Subtotal</span>
-                            <span>${subtotal.toFixed(2)}</span>
+                                    {createStatus === "loading"
+                                        ? "Placing order..."
+                                        : "Place Order"}
+                                </button>
+                            </form>
                         </div>
-                        <div className="d-flex justify-content-between">
-                            <span>Shipping</span>
-                            <span>${shippingPrice.toFixed(2)}</span>
-                        </div>
-                        <hr />
-                        <div className="d-flex justify-content-between fw-bold">
-                            <span>Total</span>
-                            <span>${totalPrice.toFixed(2)}</span>
+                    </div>
+                </div>
+
+                <div className="col-lg-5">
+                    <div className="card shadow-sm border-0 rounded-3 sticky-top" style={{ top: "20px" }}>
+                        <div className="card-body p-4">
+                            <h5 className="card-title mb-4">Order Summary</h5>
+                            <div className="mb-3" style={{ maxHeight: "250px", overflowY: "auto" }}>
+                                {cartItems.map((item) => (
+                                    <div
+                                        key={item.product?._id}
+                                        className="d-flex justify-content-between align-items-center mb-2 pb-2 border-bottom"
+                                    >
+                                        <div className="d-flex align-items-center">
+                                            <img
+                                                src={
+                                                    item.product?.images?.[0]?.url ||
+                                                    "https://via.placeholder.com/50"
+                                                }
+                                                alt={item.product?.name}
+                                                className="rounded me-2"
+                                                style={{
+                                                    width: "50px",
+                                                    height: "50px",
+                                                    objectFit: "cover",
+                                                }}
+                                            />
+                                            <div>
+                                                <div className="small fw-bold">{item.product?.name}</div>
+                                                <div className="text-muted small">Qty: {item.qty}</div>
+                                            </div>
+                                        </div>
+                                        <span className="fw-bold">
+                                            ${((item.product?.price || 0) * item.qty).toFixed(2)}
+                                        </span>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div className="d-flex justify-content-between mb-2">
+                                <span>Subtotal</span>
+                                <span>${subtotal.toFixed(2)}</span>
+                            </div>
+                            <div className="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Shipping</span>
+                                <span>${shippingPrice.toFixed(2)}</span>
+                            </div>
+                            <div className="d-flex justify-content-between mb-0">
+                                <span className="fs-5 fw-bold">Total</span>
+                                <span className="fs-5 fw-bold text-primary">${totalPrice.toFixed(2)}</span>
+                            </div>
                         </div>
                     </div>
                 </div>

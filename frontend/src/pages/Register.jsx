@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { registerUser } from "../features/auth/authSlice.js";
 import useAuth from "../hooks/useAuth.js";
+import { showSuccess, showError } from "../utils/toast.js";
 
 const Register = () => {
     const dispatch = useDispatch();
@@ -26,20 +27,22 @@ const Register = () => {
         const resultAction = await dispatch(registerUser(form));
 
         if (registerUser.fulfilled.match(resultAction)) {
-            // after successful register, go to home or login
+            showSuccess("Registration successful!");
             navigate("/");
+        } else {
+            showError(resultAction.payload || "Registration failed");
         }
     };
 
     return (
         <div className="row justify-content-center">
             <div className="col-md-6">
-                <div className="card shadow-sm border-0">
+                <div className="card shadow-sm border-0 rounded-3">
                     <div className="card-body p-4">
-                        <h3 className="mb-3 text-center">Register</h3>
+                        <h3 className="mb-4 text-center">Register</h3>
 
                         {error && (
-                            <div className="alert alert-danger py-2">{error}</div>
+                            <div className="alert alert-danger">{error}</div>
                         )}
 
                         <form onSubmit={handleSubmit}>
@@ -109,7 +112,7 @@ const Register = () => {
                         </form>
 
                         <p className="mt-3 mb-0 text-center">
-                            Already have an account? <a href="/login">Login here</a>
+                            Already have an account? <Link to="/login">Login here</Link>
                         </p>
                     </div>
                 </div>

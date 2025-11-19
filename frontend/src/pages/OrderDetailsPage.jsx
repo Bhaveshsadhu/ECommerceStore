@@ -17,17 +17,24 @@ const OrderDetailsPage = () => {
 
     if (orderDetailsStatus === "loading") {
         return (
-            <p className="text-center text-muted">Loading order...</p>
+            <div className="text-center py-5">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden">Loading...</span>
+                </div>
+                <p className="text-muted mt-3">Loading order...</p>
+            </div>
         );
     }
 
     if (orderDetailsStatus === "failed") {
         return (
-            <div className="text-center">
-                <p className="text-danger mb-3">{orderDetailsError}</p>
-                <Link to="/my-orders" className="btn btn-primary">
-                    Back to My Orders
-                </Link>
+            <div className="text-center py-5">
+                <div className="alert alert-danger d-inline-block">{orderDetailsError}</div>
+                <div>
+                    <Link to="/my-orders" className="btn btn-primary">
+                        Back to My Orders
+                    </Link>
+                </div>
             </div>
         );
     }
@@ -41,95 +48,143 @@ const OrderDetailsPage = () => {
         paymentStatus,
         orderStatus,
         totalPrice,
+        itemsPrice,
+        shippingPrice,
         createdAt,
         deliveredAt,
     } = order;
 
+    const getStatusBadgeClass = (status) => {
+        const statusMap = {
+            Pending: "bg-warning",
+            Processing: "bg-info",
+            Shipped: "bg-primary",
+            "Out for Delivery": "bg-primary",
+            Delivered: "bg-success",
+            Cancelled: "bg-danger",
+        };
+        return statusMap[status] || "bg-secondary";
+    };
+
     return (
         <div>
-            <h3 className="mb-3">
-                Order #{order._id.slice(-6)}
-            </h3>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <h2>Order #{order._id.slice(-8).toUpperCase()}</h2>
+                <Link to="/my-orders" className="btn btn-outline-secondary">
+                    Back to Orders
+                </Link>
+            </div>
 
-            <div className="row">
-                <div className="col-md-7 mb-3">
-                    <div className="card shadow-sm border-0 mb-3">
-                        <div className="card-body">
-                            <h5 className="card-title">Shipping Address</h5>
-                            <p className="mb-1">{shippingAddress?.fullName}</p>
-                            <p className="mb-1">
-                                {shippingAddress?.addressLine1}
-                                {shippingAddress?.addressLine2
-                                    ? `, ${shippingAddress.addressLine2}`
-                                    : ""}
-                            </p>
+            <div className="row g-4">
+                <div className="col-lg-8">
+                    <div className="card shadow-sm border-0 rounded-3 mb-4">
+                        <div className="card-body p-4">
+                            <h5 className="card-title mb-3">Order Items</h5>
+                            {orderItems?.map((item) => (
+                                <div
+                                    key={item._id}
+                                    className="d-flex align-items-center mb-3 pb-3 border-bottom"
+                                >
+                                    <img
+                                        src={item.image || "https://via.placeholder.com/80"}
+                                        alt={item.name}
+                                        className="rounded me-3"
+                                        style={{
+                                            width: "80px",
+                                            height: "80px",
+                                            objectFit: "cover",
+                                        }}
+                                    />
+                                    <div className="flex-grow-1">
+                                        <h6 className="mb-1">{item.name}</h6>
+                                        <p className="text-muted small mb-0">
+                                            Qty: {item.qty} × ${item.price?.toFixed(2)}
+                                        </p>
+                                    </div>
+                                    <div className="text-end">
+                                        <div className="fw-bold">
+                                            ${(item.qty * item.price).toFixed(2)}
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="card shadow-sm border-0 rounded-3">
+                        <div className="card-body p-4">
+                            <h5 className="card-title mb-3">Shipping Address</h5>
+                            <p className="mb-1 fw-bold">{shippingAddress?.fullName}</p>
+                            <p className="mb-1">{shippingAddress?.addressLine1}</p>
+                            {shippingAddress?.addressLine2 && (
+                                <p className="mb-1">{shippingAddress.addressLine2}</p>
+                            )}
                             <p className="mb-1">
                                 {shippingAddress?.city}, {shippingAddress?.state}{" "}
                                 {shippingAddress?.postcode}
                             </p>
                             <p className="mb-1">{shippingAddress?.country}</p>
                             <p className="mb-0">
-                                Phone: {shippingAddress?.phone}
+                                <strong>Phone:</strong> {shippingAddress?.phone}
                             </p>
-                        </div>
-                    </div>
-
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body">
-                            <h5 className="card-title">Items</h5>
-                            <ul className="list-unstyled mb-0">
-                                {orderItems?.map((item) => (
-                                    <li
-                                        key={item._id}
-                                        className="d-flex justify-content-between mb-2 small"
-                                    >
-                                        <div>
-                                            <div>{item.name}</div>
-                                            <div className="text-muted">
-                                                Qty: {item.qty} × ${item.price?.toFixed(2)}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            ${(item.qty * item.price).toFixed(2)}
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <div className="col-md-5 mb-3">
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body">
-                            <h5 className="card-title">Order Summary</h5>
-                            <p className="mb-1">
-                                <strong>Status:</strong> {orderStatus}
-                            </p>
-                            <p className="mb-1">
-                                <strong>Payment:</strong> {paymentMethod} (
-                                {paymentStatus})
-                            </p>
-                            <p className="mb-1">
-                                <strong>Created:</strong>{" "}
-                                {new Date(createdAt).toLocaleString()}
-                            </p>
-                            {deliveredAt && (
-                                <p className="mb-1">
-                                    <strong>Delivered:</strong>{" "}
-                                    {new Date(deliveredAt).toLocaleString()}
-                                </p>
-                            )}
-                            <hr />
-                            <p className="d-flex justify-content-between">
-                                <span>Total</span>
-                                <span className="fw-bold">
+                <div className="col-lg-4">
+                    <div className="card shadow-sm border-0 rounded-3 mb-3">
+                        <div className="card-body p-4">
+                            <h5 className="card-title mb-3">Order Summary</h5>
+
+                            <div className="mb-3">
+                                <span className={`badge ${getStatusBadgeClass(orderStatus)} px-3 py-2`}>
+                                    {orderStatus}
+                                </span>
+                            </div>
+
+                            <div className="d-flex justify-content-between mb-2">
+                                <span>Items Price</span>
+                                <span>${itemsPrice?.toFixed(2) || "0.00"}</span>
+                            </div>
+                            <div className="d-flex justify-content-between mb-3 pb-3 border-bottom">
+                                <span>Shipping</span>
+                                <span>${shippingPrice?.toFixed(2) || "0.00"}</span>
+                            </div>
+                            <div className="d-flex justify-content-between mb-4">
+                                <span className="fs-5 fw-bold">Total</span>
+                                <span className="fs-5 fw-bold text-primary">
                                     ${totalPrice?.toFixed(2)}
                                 </span>
-                            </p>
-                            <Link to="/my-orders" className="btn btn-primary w-100">
-                                Back to My Orders
-                            </Link>
+                            </div>
+
+                            <div className="mb-3 pb-3 border-bottom">
+                                <p className="mb-1">
+                                    <strong>Payment Method:</strong> {paymentMethod}
+                                </p>
+                                <p className="mb-0">
+                                    <strong>Payment Status:</strong>{" "}
+                                    <span
+                                        className={`badge ${
+                                            paymentStatus === "Paid" ? "bg-success" : "bg-warning"
+                                        }`}
+                                    >
+                                        {paymentStatus}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <div>
+                                <p className="mb-1 small text-muted">
+                                    <strong>Order Date:</strong><br />
+                                    {new Date(createdAt).toLocaleString()}
+                                </p>
+                                {deliveredAt && (
+                                    <p className="mb-0 small text-muted">
+                                        <strong>Delivered Date:</strong><br />
+                                        {new Date(deliveredAt).toLocaleString()}
+                                    </p>
+                                )}
+                            </div>
                         </div>
                     </div>
                 </div>

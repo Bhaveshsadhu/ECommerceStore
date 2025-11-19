@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { loginUser } from "../features/auth/authSlice.js";
 import useAuth from "../hooks/useAuth.js";
+import { showSuccess, showError } from "../utils/toast.js";
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -27,26 +28,22 @@ const Login = () => {
         const resultAction = await dispatch(loginUser(form));
 
         if (loginUser.fulfilled.match(resultAction)) {
-            // redirect after login
+            showSuccess("Login successful!");
             navigate(from, { replace: true });
+        } else {
+            showError(resultAction.payload || "Login failed");
         }
     };
 
     return (
         <div className="row justify-content-center">
             <div className="col-md-5">
-                <div className="card shadow-sm border-0">
+                <div className="card shadow-sm border-0 rounded-3">
                     <div className="card-body p-4">
-                        <h3 className="mb-3 text-center">Login</h3>
+                        <h3 className="mb-4 text-center">Login</h3>
 
                         {error && (
-                            <div className="alert alert-danger py-2">{error}</div>
-                        )}
-
-                        {user && (
-                            <div className="alert alert-success py-2">
-                                Logged in as {user.name} ({user.role})
-                            </div>
+                            <div className="alert alert-danger">{error}</div>
                         )}
 
                         <form onSubmit={handleSubmit}>
@@ -87,7 +84,7 @@ const Login = () => {
 
                         <p className="mt-3 mb-0 text-center">
                             Don&apos;t have an account?{" "}
-                            <a href="/register">Register here</a>
+                            <Link to="/register">Register here</Link>
                         </p>
                     </div>
                 </div>

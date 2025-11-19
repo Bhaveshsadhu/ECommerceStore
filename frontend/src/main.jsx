@@ -8,6 +8,9 @@ import store from "./app/store.js";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 
+// React Toastify
+import "react-toastify/dist/ReactToastify.css";
+
 // Global styles
 import "./styles/global.css";
 
