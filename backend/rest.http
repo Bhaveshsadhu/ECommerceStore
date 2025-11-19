@@ -111,7 +111,6 @@ Content-Type: {{contentType}}
 ### GET LOGGED-IN USER PROFILE
 GET {{baseUrl}}/auth/me
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
 
 ############################################################
 # LOGOUT
@@ -120,7 +119,7 @@ Authorization: Bearer {{token}}
 ### LOGOUT USER
 POST {{baseUrl}}/auth/logout
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 
 
@@ -143,12 +142,12 @@ Content-Type: {{contentType}}
 ### Get my vendor products (vendor/admin)
 GET {{baseUrl}}/products/vendor/me
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 ### Create product (vendor or admin)
 POST {{baseUrl}}/products
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 {
   "name": "Sample Product",
@@ -167,7 +166,7 @@ Authorization: Bearer {{token}}
 ### Update product (vendor or admin)
 PUT {{baseUrl}}/products/{{productId}}
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 {
   "name": "Updated Product Name",
@@ -178,12 +177,12 @@ Authorization: Bearer {{token}}
 ### Delete product (vendor or admin)
 DELETE {{baseUrl}}/products/{{productId}}
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 ### Approve product (admin only)
 PATCH {{baseUrl}}/products/{{productId}}/approve
 Content-Type: {{contentType}}
-Authorization: Bearer {{adminToken}}
+# Authorization: Bearer {{adminToken}}
 
 
 ############################################################
@@ -196,12 +195,12 @@ Authorization: Bearer {{adminToken}}
 ### Get my cart
 GET {{baseUrl}}/cart
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 ### Add item to cart
 POST {{baseUrl}}/cart/add
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 {
   "productId": "{{productId}}",
@@ -211,7 +210,7 @@ Authorization: Bearer {{token}}
 ### Update item quantity in cart
 PUT {{baseUrl}}/cart/update
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 {
   "productId": "{{productId}}",
@@ -221,12 +220,12 @@ Authorization: Bearer {{token}}
 ### Remove item from cart
 DELETE {{baseUrl}}/cart/remove/{{productId}}
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 ### Clear cart
 DELETE {{baseUrl}}/cart/clear
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 
 ############################################################
@@ -241,7 +240,7 @@ Authorization: Bearer {{token}}
 ### Create order from cart
 POST {{baseUrl}}/orders
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 {
   "shippingAddress": {
@@ -260,9 +259,176 @@ Authorization: Bearer {{token}}
 ### Get my orders
 GET {{baseUrl}}/orders/my
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
 
 ### Get single order by ID
 GET {{baseUrl}}/orders/{{orderId}}
 Content-Type: {{contentType}}
-Authorization: Bearer {{token}}
+
+
+############################################################
+# VENDOR APIs
+############################################################
+
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+# @vendorToken = PASTE_VENDOR_JWT_HERE
+# @vendorOrderId = FILL_AFTER_FETCHING ORDERS
+
+### Get vendor stats (as vendor)
+GET {{baseUrl}}/vendor/stats
+Content-Type: {{contentType}}
+# Authorization: Bearer {{vendorToken}}
+
+### Get vendor orders (orders that contain vendor's products)
+GET {{baseUrl}}/vendor/orders
+Content-Type: {{contentType}}
+# Authorization: Bearer {{vendorToken}}
+
+### Get single vendor order by ID
+GET {{baseUrl}}/vendor/orders/{{vendorOrderId}}
+Content-Type: {{contentType}}
+# Authorization: Bearer {{vendorToken}}
+
+
+############################################################
+# DELIVERY PARTNER APIs
+############################################################
+
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+# @deliveryToken = PASTE_DELIVERY_PARTNER_JWT_HERE
+# @deliveryOrderId = FILL_FROM_ASSIGNED_ORDERS_RESPONSE
+
+### Get delivery partner stats
+GET {{baseUrl}}/delivery/stats
+Content-Type: {{contentType}}
+# Authorization: Bearer {{deliveryToken}}
+
+### Get assigned orders
+GET {{baseUrl}}/delivery/assigned-orders
+Content-Type: {{contentType}}
+# Authorization: Bearer {{deliveryToken}}
+
+### Get assigned orders filtered by status
+GET {{baseUrl}}/delivery/assigned-orders?status=out-for-delivery
+Content-Type: {{contentType}}
+# Authorization: Bearer {{deliveryToken}}
+
+### Set order status to out-for-delivery
+PUT {{baseUrl}}/delivery/orders/{{deliveryOrderId}}/status
+Content-Type: {{contentType}}
+# Authorization: Bearer {{deliveryToken}}
+
+{
+  "status": "out-for-delivery"
+}
+
+### Set order status to delivered
+PUT {{baseUrl}}/delivery/orders/{{deliveryOrderId}}/status
+Content-Type: {{contentType}}
+# Authorization: Bearer {{deliveryToken}}
+
+{
+  "status": "delivered"
+}
+
+
+############################################################
+# ADMIN APIs
+############################################################
+
+@baseUrl = http://localhost:5000/api
+@contentType = application/json
+# @adminToken = PASTE_ADMIN_JWT_HERE
+# @userId = SOME_USER_ID
+# @vendorId = SOME_VENDOR_USER_ID
+# @partnerId = SOME_DELIVERY_PARTNER_USER_ID
+# @adminOrderId = SOME_ORDER_ID
+
+### Admin: Dashboard stats
+GET {{baseUrl}}/admin/stats
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Get all users
+GET {{baseUrl}}/admin/users
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Change user role
+PUT {{baseUrl}}/admin/users/{{userId}}/role
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+{
+  "role": "vendor"
+}
+
+### Admin: Block user
+PUT {{baseUrl}}/admin/users/{{userId}}/block
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Unblock user
+PUT {{baseUrl}}/admin/users/{{userId}}/unblock
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Get all vendors
+GET {{baseUrl}}/admin/vendors
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Approve vendor
+PUT {{baseUrl}}/admin/vendors/{{vendorId}}/approve
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Deactivate vendor
+PUT {{baseUrl}}/admin/vendors/{{vendorId}}/deactivate
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Get all delivery partners
+GET {{baseUrl}}/admin/delivery-partners
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Activate delivery partner
+PUT {{baseUrl}}/admin/delivery-partners/{{partnerId}}/activate
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Deactivate delivery partner
+PUT {{baseUrl}}/admin/delivery-partners/{{partnerId}}/deactivate
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Get all orders
+GET {{baseUrl}}/admin/orders
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Get order by ID
+GET {{baseUrl}}/admin/orders/{{adminOrderId}}
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+### Admin: Update order status
+PUT {{baseUrl}}/admin/orders/{{adminOrderId}}/status
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+{
+  "orderStatus": "shipped"
+}
+
+### Admin: Assign delivery partner
+PUT {{baseUrl}}/admin/orders/{{adminOrderId}}/assign-delivery
+Content-Type: {{contentType}}
+# Authorization: Bearer {{adminToken}}
+
+{
+  "deliveryPartnerId": "{{partnerId}}"
+}

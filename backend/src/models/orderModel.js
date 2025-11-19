@@ -12,8 +12,8 @@ const orderItemSchema = new mongoose.Schema(
             ref: "User", // vendor
             required: true,
         },
-        name: { type: String, required: true },  // snapshot
-        price: { type: Number, required: true }, // snapshot
+        name: { type: String, required: true },
+        price: { type: Number, required: true },
         qty: { type: Number, required: true, min: 1 },
     },
     { _id: false }

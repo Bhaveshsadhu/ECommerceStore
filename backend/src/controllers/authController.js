@@ -7,22 +7,22 @@ import generateTokenAndSetCookie from "../utils/generateToken.js";
 // @access  Public
 export const registerUser = asyncHandler(async (req, res) => {
     const { name, email, password, role } = req.body;
-
+    // 1. return back if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         res.status(400);
         throw new Error("User with this email already exists");
     }
-
+    // 2. create user
     const user = await User.create({
         name,
         email,
         password,
         role: role || "user",
     });
-
+    // 3. generate token and set cookie
     const token = generateTokenAndSetCookie(res, user._id);
-
+    // 4. respond with user data
     res.status(201).json({
         message: "User registered successfully",
         token,
@@ -40,9 +40,9 @@ export const registerUser = asyncHandler(async (req, res) => {
 // @access  Public
 export const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
-
+    // 1. find user by email
     const user = await User.findOne({ email });
-
+    // 2. check if user exists and password matches
     if (!user) {
         res.status(401);
         throw new Error("Invalid email or password");
@@ -53,14 +53,14 @@ export const loginUser = asyncHandler(async (req, res) => {
         res.status(401);
         throw new Error("Invalid email or password");
     }
-
+    // 3. check if user is blocked
     if (user.isBlocked) {
         res.status(403);
         throw new Error("Your account has been blocked. Contact support.");
     }
-
+    // 4. generate token and set cookie
     const token = generateTokenAndSetCookie(res, user._id);
-
+    // 5. respond with user data
     res.json({
         message: "Logged in successfully",
         token,

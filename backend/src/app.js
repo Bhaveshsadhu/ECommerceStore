@@ -5,12 +5,19 @@ import morgan from "morgan";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
+// import mongoSanitize from 'express-mongo-sanitize';
 
 import logger from "./utils/logger.js";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 import productRoutes from "./routes/productRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
+import vendorRoutes from "./routes/vendorRoutes.js";
+import deliveryRoutes from "./routes/deliveryRoutes.js";
+import adminRoutes from "./routes/adminRoutes.js";
+
+
+
 
 
 
@@ -22,8 +29,7 @@ dotenv.config();
 
 const app = express();
 
-// Security headers
-app.use(helmet());
+
 
 // CORS
 app.use(
@@ -36,6 +42,9 @@ app.use(
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// app.use(mongoSanitize());
+// Security headers
+app.use(helmet());
 
 // Cookies
 app.use(cookieParser());
@@ -69,6 +78,9 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/vendor", vendorRoutes);
+app.use("/api/delivery", deliveryRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 
